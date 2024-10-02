@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: jwtdemo
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/jwt_db
+    username: springstudent
+    password: Springstudent3692@#
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    validate-on-migrate: true
+    clean-on-validation-error: false
