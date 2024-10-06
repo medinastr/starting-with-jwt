@@ -37,4 +37,20 @@ public class JwtTokenProvider {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
         algorithm = Algorithm.HMAC256(secretKey.getBytes());
     }
+
+    public TokenDTO createAccessToken(String username, List<String> roles) {
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+        String accessToken = getAccessToken(username, roles, now, validity);
+        String refreshToken = getRefreshToken(username, roles, now);
+        return new TokenDTO(username, true, now, validity, accessToken, refreshToken);
+    }
+
+    private String getAccessToken(String username, List<String> roles, Date now, Date validity) {
+        return null;
+    }
+
+    private String getRefreshToken(String username, List<String> roles, Date now) {
+        return null;
+    }
 }

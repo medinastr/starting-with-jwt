@@ -14,7 +14,7 @@ import java.util.Date;
 public class TokenDTO {
 
     private String username;
-    private String authenticated;
+    private boolean authenticated;
     private Date created;
     private Date expiration;
     private String accessToken;
