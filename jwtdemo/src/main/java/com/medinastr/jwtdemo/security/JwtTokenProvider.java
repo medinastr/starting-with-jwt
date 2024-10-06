@@ -1,13 +1,16 @@
 package com.medinastr.jwtdemo.security;
 
+import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.medinastr.jwtdemo.model.dto.security.TokenDTO;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.Servlet;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Base64;
 import java.util.Date;
@@ -20,7 +23,7 @@ public class JwtTokenProvider {
     private String secretKey = "secret";
 
     @Value("${security.jwt.token.expire-length:3600000}")
-    private long validityInMilliseconds = 3600000; // 1 hour
+    private static final long validityInMilliseconds = 3600000; // 1 hour
 
     private final UserDetailsService userDetailsService;
 
@@ -47,7 +50,17 @@ public class JwtTokenProvider {
     }
 
     private String getAccessToken(String username, List<String> roles, Date now, Date validity) {
-        return null;
+        String issuerUrl = ServletUriComponentsBuilder
+                .fromCurrentContextPath()
+                .build()
+                .toUriString();
+        return JWT.create()
+                .withClaim("roles", roles)
+                .withIssuedAt(now)
+                .withExpiresAt(validity)
+                .withIssuer(issuerUrl)
+                .sign(algorithm)
+                .strip();
     }
 
     private String getRefreshToken(String username, List<String> roles, Date now) {
