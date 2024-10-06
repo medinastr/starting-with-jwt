@@ -24,6 +24,4 @@ public class Permission implements GrantedAuthority {
     public String getAuthority() {
         return this.description; // Returning the description as the authority
     }
-
-
 }
