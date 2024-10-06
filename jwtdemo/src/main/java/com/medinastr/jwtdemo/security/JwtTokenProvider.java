@@ -28,7 +28,7 @@ public class JwtTokenProvider {
     private String secretKey = "secret";
 
     @Value("${security.jwt.token.expire-length:3600000}")
-    private static final long validityInMilliseconds = 3600000; // 1 hour
+    private long validityInMilliseconds = 3600000; // 1 hour
 
     private final UserDetailsService userDetailsService;
 
@@ -65,8 +65,7 @@ public class JwtTokenProvider {
                 .withExpiresAt(validity)
                 .withSubject(username)
                 .withIssuer(issuerUrl)
-                .sign(algorithm)
-                .strip();
+                .sign(algorithm);
     }
 
     private String getRefreshToken(String username, List<String> roles, Date now) {
@@ -76,8 +75,7 @@ public class JwtTokenProvider {
                 .withIssuedAt(now)
                 .withExpiresAt(validityRefreshToken)
                 .withSubject(username)
-                .sign(algorithm)
-                .strip();
+                .sign(algorithm);
     }
 
     public Authentication getAuthentication(String token) {
@@ -100,7 +98,6 @@ public class JwtTokenProvider {
         if(bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring("Bearer ".length());
         }
-
         return null;
     }
 
@@ -110,6 +107,7 @@ public class JwtTokenProvider {
             if(decodedJWT.getExpiresAt().before(new Date())) { // se ele for antes de agora -> invalid!
                 return false;
             }
+            return true;
         } catch (Exception exc) {
             throw new InvalidJwtAuthenticationException("Expired or invalid JWT token");
         }
