@@ -1,4 +1,4 @@
-package com.medinastr.jwtdemo.model.entity.service;
+package com.medinastr.jwtdemo.service;
 
 import com.medinastr.jwtdemo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
