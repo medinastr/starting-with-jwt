@@ -1,13 +1,17 @@
 package com.medinastr.jwtdemo.security;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.medinastr.jwtdemo.model.dto.security.TokenDTO;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.Servlet;
-import lombok.Data;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -73,5 +77,19 @@ public class JwtTokenProvider {
                 .withSubject(username)
                 .sign(algorithm)
                 .strip();
+    }
+
+    public Authentication getAuthentication(String token) {
+        DecodedJWT decodedJWT = decodedToken(token);
+        UserDetails userDetails = this.userDetailsService
+                .loadUserByUsername(decodedJWT.getSubject());
+        return new UsernamePasswordAuthenticationToken(decodedJWT, "", userDetails.getAuthorities());
+    }
+
+    private DecodedJWT decodedToken(String token) {
+        Algorithm alg = Algorithm.HMAC256(secretKey.getBytes());
+        JWTVerifier verifier = JWT.require(alg).build();
+        DecodedJWT decodedJWT = verifier.verify(token);
+        return decodedJWT;
     }
 }
