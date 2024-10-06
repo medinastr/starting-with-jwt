@@ -58,12 +58,20 @@ public class JwtTokenProvider {
                 .withClaim("roles", roles)
                 .withIssuedAt(now)
                 .withExpiresAt(validity)
+                .withSubject(username)
                 .withIssuer(issuerUrl)
                 .sign(algorithm)
                 .strip();
     }
 
     private String getRefreshToken(String username, List<String> roles, Date now) {
-        return null;
+        Date validityRefreshToken = new Date(now.getTime() + (validityInMilliseconds * 3));
+        return JWT.create()
+                .withClaim("roles", roles)
+                .withIssuedAt(now)
+                .withExpiresAt(validityRefreshToken)
+                .withSubject(username)
+                .sign(algorithm)
+                .strip();
     }
 }
