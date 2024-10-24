@@ -24,10 +24,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${security.encoder.salt-length}")
+    @Value("${security.jwt.encoder.salt-length}")
     private int saltLength;
 
-    @Value("${security.encoder.iterations}")
+    @Value("${security.jwt.encoder.iterations}")
     private int iterations;
 
     private final JwtTokenProvider tokenProvider;

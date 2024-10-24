@@ -3,6 +3,9 @@ security:
     token:
       secret-key: ${SECRET_KEY}
       expire-length: ${EXPIRE_LENGTH}
+    encoder:
+      salt-length: ${SALT_LENGTH}
+      iterations: ${ITERATIONS}
 
 spring:
   application:
