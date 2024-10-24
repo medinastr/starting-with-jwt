@@ -30,7 +30,12 @@ public class SecurityConfig {
     @Value("${security.encoder.iterations}")
     private int iterations;
 
-    @Autowired private JwtTokenProvider tokenProvider;
+    private final JwtTokenProvider tokenProvider;
+
+    @Autowired
+    public SecurityConfig(JwtTokenProvider tokenProvider) {
+        this.tokenProvider = tokenProvider;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
